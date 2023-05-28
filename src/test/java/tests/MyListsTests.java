@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.*;
@@ -7,15 +9,23 @@ import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListPageObjectFactory;
 import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
+@Epic(value = "Tests for My favorite article list")
 public class MyListsTests extends CoreTestCase {
 
     private static final String
             name_of_folder = "Learning programming",
             login = "VeraQa",
             password = "vero2502";
+
     @Test
+    @Features(value = {@Feature(value = "Search"),@Feature(value = "Article"),@Feature(value = "My favorite list")})
+    @DisplayName("Saving first article in My favorite list")
+    @Description("Saving article in my favorite list and checking deleting it from list")
+    @Step("Starting test testCompareArticleTitle")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testSaveFirstArticleToMyList() {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
 
@@ -37,9 +47,13 @@ public class MyListsTests extends CoreTestCase {
             Auth.enterLoginData(login, password);
             Auth.submitForm();
 
+            String url = driver.getCurrentUrl();
+            String new_url = url.substring(0,11) + "m." + url.substring(11);
+            driver.get(new_url);
+
             ArticlePageObject.waitForTitleElement();
 
-            assertEquals("We are not on the same page after login",
+            Assert.assertEquals("We are not on the same page after login",
                     article_title,
                     ArticlePageObject.getArticleTitle()
             );
@@ -65,6 +79,11 @@ public class MyListsTests extends CoreTestCase {
     }
 
     @Test
+    @Features(value = {@Feature(value = "Search"),@Feature(value = "Article"),@Feature(value = "My favorite list")})
+    @DisplayName("Saving some articles in my favorite list")
+    @Description("Saving some article in my favorite list and checking deleting one of then from my favorite list")
+    @Step("Starting test testCompareArticleTitle")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testCheckSavingSecondArticleInFavorite() {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
 
@@ -89,7 +108,7 @@ public class MyListsTests extends CoreTestCase {
 
             ArticlePageObject.waitForTitleElement();
 
-            assertEquals("We are not on the same page after login",
+            Assert.assertEquals("We are not on the same page after login",
                     article_title_first,
                     ArticlePageObject.getArticleTitle()
             );

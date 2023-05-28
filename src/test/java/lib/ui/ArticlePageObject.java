@@ -1,6 +1,7 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
+
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -23,14 +24,19 @@ abstract  public class ArticlePageObject extends MainPageObject{
         super(driver);
     }
 
+    @Step("Waiting for title on the article page")
     public WebElement waitForTitleElement() {
         return this.waitForElementPresent(TITLE_ID,"Cannot find article title",5);
     }
+    @Step("Waiting for second title on the screen")
     public WebElement waitForTitleElementSecond() {
         return this.waitForElementPresent(TITLE_ID_SECOND,"Cannot find article title",5);
     }
+
+    @Step("Getting of article title")
     public String getArticleTitle() {
         WebElement title_element = waitForTitleElement();
+        screenshot(this.takeScreenshot("article_title"));
         if(Platform.getInstance().isAndroid()) {
             return title_element.getAttribute("text");
         } else if (Platform.getInstance().isIOS()) {
@@ -39,6 +45,8 @@ abstract  public class ArticlePageObject extends MainPageObject{
             return title_element.getText();
         }
     }
+
+    @Step("Getting of second article title on screen")
     public String getArticleSecond() {
         WebElement title_element = waitForTitleElementSecond();
         if(Platform.getInstance().isAndroid()) {
@@ -47,6 +55,8 @@ abstract  public class ArticlePageObject extends MainPageObject{
             return title_element.getAttribute("name");
         }
     }
+
+    @Step("Swiping article page to footer")
     public void swipeToFooter() {
         if (Platform.getInstance().isAndroid()) {
             this.swipeUpToFindElement(FOOTER_ELEMENT, "Cannot find end of screen", 40);
@@ -56,6 +66,8 @@ abstract  public class ArticlePageObject extends MainPageObject{
             this.scrollWebPageTillElementNotVisible (FOOTER_ELEMENT, "Cannot find end of screen", 40);
         }
     }
+
+    @Step("Adding article to my favorite list")
     public void addArticleToMyList(String titleOfList) {
         this.waitForElementAndClick(
                 MORE_OPTIONS_BUTTON,
@@ -89,6 +101,8 @@ abstract  public class ArticlePageObject extends MainPageObject{
                 5
         );
     }
+
+    @Step("Adding article to my favorite list if article already added")
     public void addArticleToMySaved() {
         if(Platform.getInstance().isMW()) {
             this.removeArticleFromSavedIfItAdded();
@@ -96,6 +110,7 @@ abstract  public class ArticlePageObject extends MainPageObject{
         this.waitForElementAndClick(OPTION_ADD_TO_MY_LIST_BUTTON, "Cannot find My saved button", 10);
     }
 
+    @Step("Removing article from my favorite list")
     public void removeArticleFromSavedIfItAdded() {
         if(this.isElementPresent(OPTION_REMOVE_FROM_MY_LIST_BUTTON)) {
             this.waitForElementAndClick(
@@ -110,6 +125,7 @@ abstract  public class ArticlePageObject extends MainPageObject{
         }
     }
 
+    @Step("Closing article page")
     public void closeArticle() {
         if ((Platform.getInstance().isIOS()) || Platform.getInstance().isAndroid()) {
             this.waitForElementAndClick(
@@ -121,6 +137,8 @@ abstract  public class ArticlePageObject extends MainPageObject{
             System.out.println("Method closeArticle() do nothing for platform " + Platform.getInstance().getPlatformVar());
         }
     }
+
+    @Step("Adding second article to my favorite list")
     public void addSecondArticleToMyList() {
         this.waitForElementAndClick(
                 MORE_OPTIONS_BUTTON,
@@ -133,6 +151,8 @@ abstract  public class ArticlePageObject extends MainPageObject{
                 5
         );
     }
+
+    @Step("Checking title of article")
     public void assertCheckTitleOfArticle() {
         assertElementPresent(
                 TITLE_ID,

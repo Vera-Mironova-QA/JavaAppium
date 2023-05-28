@@ -1,15 +1,23 @@
 package tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
+@Epic(value = "Core tests")
 public class ChangeAppConditionTests extends CoreTestCase {
     @Test
+    @Feature(value = "Orientation screen")
+    @DisplayName("Change screen orientation on search screen for iOS and Android")
+    @Step("Starting test testChangeScreenOrientationOnSearchScreen")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testChangeScreenOrientationOnSearchScreen() {
         if (Platform.getInstance().isMW()){
             return;
@@ -25,7 +33,7 @@ public class ChangeAppConditionTests extends CoreTestCase {
         this.rotateScreenLandscape();
         String titleAfterRotation = ArticlePageObject.getArticleTitle();
 
-        assertEquals(
+        Assert.assertEquals(
                 "Title of article have been changed after rotation",
                 titleBeforeRotation,
                 titleAfterRotation
@@ -33,7 +41,7 @@ public class ChangeAppConditionTests extends CoreTestCase {
         this.rotateScreenPortrait();
         String titleAfterSecondRotation = ArticlePageObject.getArticleTitle();
 
-        assertEquals(
+        Assert.assertEquals(
                 "Title of article have been changed after second rotation",
                 titleBeforeRotation,
                 titleAfterSecondRotation
@@ -41,6 +49,10 @@ public class ChangeAppConditionTests extends CoreTestCase {
     }
 
     @Test
+    @Feature(value = "Background App")
+    @DisplayName("Check search article after background app for iOS and Android")
+    @Step("Starting test testCheckSearchArticleInBackground")
+    @Severity(value = SeverityLevel.MINOR)
     public void testCheckSearchArticleInBackground() {
         if (Platform.getInstance().isMW()){
             return;
